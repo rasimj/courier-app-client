@@ -12,7 +12,9 @@ export default function LoginPage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post('https://courier-app-server.onrender.com', { username, password });
+      // This is the corrected URL with the full endpoint path
+      const res = await axios.post('https://courier-app-server.onrender.com/api/auth/login', { username, password });
+      
       localStorage.setItem('token', res.data.token);
       window.location.href = '/'; 
     } catch (err) {
@@ -23,8 +25,8 @@ export default function LoginPage() {
   return (
     <div className="auth-container">
       <form onSubmit={handleSubmit} className="auth-form">
-      
-        <h2 >Sign In</h2>
+        <img src="/images/logo.png" alt="Logo" className="auth-logo" />
+        <h2>Sign In</h2>
         {error && <p className="error-message">{error}</p>}
         <input 
           type="text" 

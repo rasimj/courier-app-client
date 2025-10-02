@@ -15,11 +15,15 @@ export default function RegisterPage() {
     setError('');
     setSuccess('');
     try {
-      await axios.post('https://courier-app-server.onrender.com', { username, password });
+      // This is the corrected URL with the full endpoint path
+      await axios.post('https://courier-app-server.onrender.com/api/auth/register', { username, password });
+      
       setSuccess('Account created successfully! Redirecting to login...');
+      
       setTimeout(() => {
         navigate('/login');
       }, 2000);
+
     } catch (err) {
       setError(err.response?.data?.msg || 'Registration failed');
     }
@@ -28,7 +32,7 @@ export default function RegisterPage() {
   return (
     <div className="auth-container">
       <form onSubmit={handleSubmit} className="auth-form">
-       
+        <img src="/images/logo.png" alt="Logo" className="auth-logo" />
         <h2>Create Your Account</h2>
         {error && <p className="error-message">{error}</p>}
         {success && <p className="success-message">{success}</p>}
