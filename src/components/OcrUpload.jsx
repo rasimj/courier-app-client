@@ -39,7 +39,7 @@ export default function OcrUpload({ onMakeJpeg }) {
     formData.append("image", file);
 
     try {
-      const res = await axios.post("http://localhost:5000/ocr", formData, {
+      const res = await axios.post("https://courier-app-server.onrender.com", formData, {
         headers: { "Content-Type": "multipart/form-data" }
       });
       const extractedText = res.data.savedText.extractedText;

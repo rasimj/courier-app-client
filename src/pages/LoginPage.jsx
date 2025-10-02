@@ -12,7 +12,7 @@ export default function LoginPage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post('http://localhost:5000/api/auth/login', { username, password });
+      const res = await axios.post('https://courier-app-server.onrender.com', { username, password });
       localStorage.setItem('token', res.data.token);
       window.location.href = '/'; 
     } catch (err) {

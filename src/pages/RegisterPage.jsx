@@ -15,7 +15,7 @@ export default function RegisterPage() {
     setError('');
     setSuccess('');
     try {
-      await axios.post('http://localhost:5000/api/auth/register', { username, password });
+      await axios.post('https://courier-app-server.onrender.com', { username, password });
       setSuccess('Account created successfully! Redirecting to login...');
       setTimeout(() => {
         navigate('/login');
