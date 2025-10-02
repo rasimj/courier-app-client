@@ -8,6 +8,10 @@ export default function RegisterPage() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
+  
+  // --- 1. Add state for showing the password ---
+  const [showPassword, setShowPassword] = useState(false);
+  
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -15,15 +19,11 @@ export default function RegisterPage() {
     setError('');
     setSuccess('');
     try {
-      // This is the corrected URL with the full endpoint path
       await axios.post('https://courier-app-server.onrender.com/api/auth/register', { username, password });
-      
       setSuccess('Account created successfully! Redirecting to login...');
-      
       setTimeout(() => {
         navigate('/login');
       }, 2000);
-
     } catch (err) {
       setError(err.response?.data?.msg || 'Registration failed');
     }
@@ -44,12 +44,25 @@ export default function RegisterPage() {
           required 
         />
         <input 
-          type="password" 
+          // --- 2. Make the input type dynamic ---
+          type={showPassword ? 'text' : 'password'} 
           value={password} 
           onChange={(e) => setPassword(e.target.value)} 
           placeholder="Password" 
           required 
         />
+        
+        {/* --- 3. Add the checkbox and label --- */}
+        <div className="show-password-container">
+          <input 
+            id="showPasswordRegister"
+            type="checkbox" 
+            checked={showPassword}
+            onChange={() => setShowPassword(!showPassword)} 
+          />
+          <label htmlFor="showPasswordRegister">Show Password</label>
+        </div>
+
         <button type="submit">Register</button>
         <p>Already have an account? <Link to="/login">Sign In</Link></p>
       </form>
