@@ -10,9 +10,13 @@ export default function OcrUpload({ onMakeJpeg }) {
   const [error, setError] = useState("");
   const [isCopied, setIsCopied] = useState(false);
 
+  // Define the live server URL once
+  const API_URL = "https://courier-app-server.onrender.com";
+
   const fetchSavedTexts = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/texts");
+      // --- CORRECTED URL 1 ---
+      const res = await axios.get(`${API_URL}/texts`);
       setSavedTexts(res.data);
     } catch (error) {
       console.error("Failed to fetch texts:", error);
@@ -39,7 +43,8 @@ export default function OcrUpload({ onMakeJpeg }) {
     formData.append("image", file);
 
     try {
-      const res = await axios.post("https://courier-app-server.onrender.com", formData, {
+      // --- CORRECTED URL 2 ---
+      const res = await axios.post(`${API_URL}/ocr`, formData, {
         headers: { "Content-Type": "multipart/form-data" }
       });
       const extractedText = res.data.savedText.extractedText;
@@ -66,7 +71,7 @@ export default function OcrUpload({ onMakeJpeg }) {
 
   return (
     <div className="ocr-container">
-      <h2>Upload Image (Image-to-Text) ✍️</h2>
+      <h2>Image-to-Text (OCR) ✍️</h2>
       <div className="upload-section">
         <input type="file" onChange={handleFileChange} accept="image/*" />
         <button onClick={handleUpload} disabled={!file || loading}>
@@ -85,7 +90,7 @@ export default function OcrUpload({ onMakeJpeg }) {
                 {isCopied ? 'Copied!' : 'Copy'}
               </button>
               <button onClick={handleMakeJpeg} className="secondary-btn">
-                Make JPEG 
+                Make JPEG 🖼️
               </button>
             </div>
           </div>
@@ -94,7 +99,7 @@ export default function OcrUpload({ onMakeJpeg }) {
       )}
       
       <div className="history-section">
-        <h3>Saved Text History (Temporary)</h3>
+        <h3>📜 Saved Text History (Temporary)</h3>
         <div className="results-list">
           {savedTexts.length > 0 ? (
             <ul>
