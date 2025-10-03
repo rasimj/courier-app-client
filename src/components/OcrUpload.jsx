@@ -10,12 +10,10 @@ export default function OcrUpload({ onMakeJpeg }) {
   const [error, setError] = useState("");
   const [isCopied, setIsCopied] = useState(false);
 
-  // Define the live server URL once
-  const API_URL = "https://courier-app-server.onrender.com";
+  const API_URL = "https://courier-app-server.onrender.com"; // Your live server URL
 
   const fetchSavedTexts = async () => {
     try {
-      // --- CORRECTED URL 1 ---
       const res = await axios.get(`${API_URL}/texts`);
       setSavedTexts(res.data);
     } catch (error) {
@@ -43,7 +41,6 @@ export default function OcrUpload({ onMakeJpeg }) {
     formData.append("image", file);
 
     try {
-      // --- CORRECTED URL 2 ---
       const res = await axios.post(`${API_URL}/ocr`, formData, {
         headers: { "Content-Type": "multipart/form-data" }
       });
@@ -67,6 +64,18 @@ export default function OcrUpload({ onMakeJpeg }) {
   const handleMakeJpeg = () => {
     onMakeJpeg(latestText);
     window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const handleClearHistory = async () => {
+    if (window.confirm("Are you sure you want to clear all text history?")) {
+      try {
+        await axios.delete(`${API_URL}/texts`);
+        setSavedTexts([]);
+      } catch (err) {
+        console.error("Failed to clear history", err);
+        alert("Could not clear history. Please try again.");
+      }
+    }
   };
 
   return (
@@ -99,7 +108,14 @@ export default function OcrUpload({ onMakeJpeg }) {
       )}
       
       <div className="history-section">
-        <h3>📜 Saved Text History (Temporary)</h3>
+        <div className="history-header">
+          <h3>📜 Saved Text History (Temporary)</h3>
+          {savedTexts.length > 0 && (
+            <button onClick={handleClearHistory} className="clear-btn">
+              Clear History
+            </button>
+          )}
+        </div>
         <div className="results-list">
           {savedTexts.length > 0 ? (
             <ul>
